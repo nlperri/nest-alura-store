@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  IsUUID,
   IsUrl,
   MaxLength,
   Min,
@@ -34,6 +35,9 @@ export class CreateProductDTO {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsUUID()
+  userId: string;
 
   @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
   @Min(1)
