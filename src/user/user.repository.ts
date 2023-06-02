@@ -30,7 +30,7 @@ export class UserRepository {
   }
 
   async update(id: string, data: Partial<UserEntity>) {
-    const user = await this.findById(id);
+    const user = this.findById(id);
 
     Object.entries(data).forEach(([key, value]) => {
       if (key === 'id') {
@@ -44,7 +44,7 @@ export class UserRepository {
   }
 
   async delete(id: string) {
-    await this.findById(id);
+    this.findById(id);
 
     this.users = this.users.filter((user) => user.id !== id);
   }
