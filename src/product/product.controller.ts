@@ -9,11 +9,7 @@ import {
 } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDTO, ProductImageDTO } from './dto/create-product.dto';
-import {
-  ProductEntity,
-  ProductImageEntity,
-  ProductInfoEntity,
-} from './product.entity';
+import { ProductEntity } from './product.entity';
 import { v4 as uuid } from 'uuid';
 import { GetProductDTO } from './dto/get-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
@@ -25,8 +21,8 @@ export class ProductController {
   @Post()
   async create(@Body() data: CreateProductDTO) {
     const productEntity = new ProductEntity();
-    const productImageEntity = new ProductImageEntity();
-    const productInfoEntity = new ProductInfoEntity();
+    // const productImageEntity = new ProductImageEntity();
+    // const productInfoEntity = new ProductInfoEntity();
     (productEntity.id = uuid()),
       (productEntity.name = data.name),
       (productEntity.userId = data.userId),
@@ -34,19 +30,19 @@ export class ProductController {
       (productEntity.quantity = data.quantity),
       (productEntity.description = data.description),
       (productEntity.category = data.category),
-      (productEntity.info = data.info.map((dataInfo) => {
-        (productInfoEntity.description = dataInfo.description),
-          (productInfoEntity.name = dataInfo.name),
-          (productInfoEntity.description = dataInfo.description);
-        return productInfoEntity;
-      }));
-    productEntity.images = data.images.map((dataImage) => {
-      (productImageEntity.description = dataImage.description),
-        (productImageEntity.url = dataImage.url);
-      return productImageEntity;
-    });
+      // (productEntity.info = data.info.map((dataInfo) => {
+      //   (productInfoEntity.description = dataInfo.description),
+      //     (productInfoEntity.name = dataInfo.name),
+      //     (productInfoEntity.description = dataInfo.description);
+      //   return productInfoEntity;
+      // }));
+      // productEntity.images = data.images.map((dataImage) => {
+      //   (productImageEntity.description = dataImage.description),
+      //     (productImageEntity.url = dataImage.url);
+      //   return productImageEntity;
+      // });
 
-    this.productRepository.create(productEntity);
+      this.productRepository.create(productEntity);
     return {
       product: new GetProductDTO(
         productEntity.id,
@@ -55,8 +51,8 @@ export class ProductController {
         productEntity.price,
         productEntity.quantity,
         productEntity.description,
-        productEntity.info,
-        productEntity.images,
+        // productEntity.info,
+        // productEntity.images,
         productEntity.category,
       ),
       message: 'Product successfully registered',
@@ -76,8 +72,8 @@ export class ProductController {
           product.quantity,
           product.description,
           product.info,
-          product.images,
-          product.category,
+          // product.images,
+          // product.category,
         ),
     );
 

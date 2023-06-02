@@ -12,7 +12,7 @@ export class PostgresConfigService implements TypeOrmOptionsFactory {
       port: this.configService.get<number>('DB_PORT'),
       username: this.configService.get<string>('DB_USERNAME'),
       password: this.configService.get<string>('DB_PASSWORD'),
-      entities: [],
+      entities: [__dirname + '/**/*.entity{.js,.ts}'],
       synchronize: true,
     };
   }

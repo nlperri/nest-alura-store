@@ -14,8 +14,8 @@ export class GetProductDTO {
     readonly price: number,
     readonly quantity: number,
     readonly description: string,
-    readonly info: ProductInfoDTO[],
-    readonly images: ProductImageDTO[],
+    // readonly info: ProductInfoDTO[],
+    // readonly images: ProductImageDTO[],
     readonly category: string,
   ) {}
 }
