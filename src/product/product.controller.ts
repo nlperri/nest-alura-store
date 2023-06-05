@@ -13,47 +13,37 @@ import { ProductEntity } from './product.entity';
 import { v4 as uuid } from 'uuid';
 import { GetProductDTO } from './dto/get-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
+import { ProductService } from './product.service';
 
 @Controller('/products')
 export class ProductController {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(
+    private readonly productRepository: ProductRepository,
+    private readonly productService: ProductService,
+  ) {}
 
   @Post()
   async create(@Body() data: CreateProductDTO) {
     const productEntity = new ProductEntity();
-    // const productImageEntity = new ProductImageEntity();
-    // const productInfoEntity = new ProductInfoEntity();
-    (productEntity.id = uuid()),
-      (productEntity.name = data.name),
-      (productEntity.userId = data.userId),
-      (productEntity.price = data.price),
-      (productEntity.quantity = data.quantity),
-      (productEntity.description = data.description),
-      (productEntity.category = data.category),
-      // (productEntity.info = data.info.map((dataInfo) => {
-      //   (productInfoEntity.description = dataInfo.description),
-      //     (productInfoEntity.name = dataInfo.name),
-      //     (productInfoEntity.description = dataInfo.description);
-      //   return productInfoEntity;
-      // }));
-      // productEntity.images = data.images.map((dataImage) => {
-      //   (productImageEntity.description = dataImage.description),
-      //     (productImageEntity.url = dataImage.url);
-      //   return productImageEntity;
-      // });
 
-      this.productRepository.create(productEntity);
+    productEntity.id = uuid();
+    productEntity.name = data.name;
+    productEntity.userId = data.userId;
+    productEntity.price = data.price;
+    productEntity.quantity = data.quantity;
+    productEntity.description = data.description;
+    productEntity.category = data.category;
+
+    const product = await this.productService.create(productEntity);
     return {
       product: new GetProductDTO(
-        productEntity.id,
-        productEntity.name,
-        productEntity.userId,
-        productEntity.price,
-        productEntity.quantity,
-        productEntity.description,
-        // productEntity.info,
-        // productEntity.images,
-        productEntity.category,
+        product.id,
+        product.name,
+        product.userId,
+        product.price,
+        product.quantity,
+        product.description,
+        product.category,
       ),
       message: 'Product successfully registered',
     };
@@ -61,7 +51,7 @@ export class ProductController {
 
   @Get()
   async get() {
-    const products = await this.productRepository.get();
+    const products = await this.productService.get();
     const productsOutput = products.map(
       (product) =>
         new GetProductDTO(
@@ -71,9 +61,7 @@ export class ProductController {
           product.price,
           product.quantity,
           product.description,
-          product.info,
-          // product.images,
-          // product.category,
+          product.category,
         ),
     );
 
@@ -82,17 +70,16 @@ export class ProductController {
 
   @Put('/:id')
   async update(@Param('id') id: string, @Body() data: UpdateProductDTO) {
-    const updatedProduct = await this.productRepository.update(id, data);
+    await this.productService.update(id, data);
 
     return {
-      updatedProduct,
       message: 'Product successfully updated',
     };
   }
 
   @Delete('/:id')
   async delete(@Param('id') id: string) {
-    await this.productRepository.delete(id);
+    await this.productService.delete(id);
 
     return {
       message: 'Product successfully deleted',
