@@ -1,11 +1,13 @@
 import {
   Body,
+  CacheTTL,
   Controller,
   Delete,
   Get,
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -14,6 +16,7 @@ import { v4 as uuid } from 'uuid';
 import { GetUserDTO } from './dto/get-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 
 @Controller('/users')
 export class UserController {
@@ -36,7 +39,9 @@ export class UserController {
       message: 'User successfully registered',
     };
   }
-
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
+  @CacheKey('users')
   @Get()
   async get() {
     const users = await this.userService.get();
