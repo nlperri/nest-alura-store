@@ -33,6 +33,8 @@ export class ProductController {
     productEntity.quantity = data.quantity;
     productEntity.description = data.description;
     productEntity.category = data.category;
+    productEntity.images = data.images;
+    productEntity.info = data.info;
 
     const product = await this.productService.create(productEntity);
     return {
@@ -44,6 +46,8 @@ export class ProductController {
         product.quantity,
         product.description,
         product.category,
+        product.info,
+        product.images,
       ),
       message: 'Product successfully registered',
     };
@@ -62,6 +66,8 @@ export class ProductController {
           product.quantity,
           product.description,
           product.category,
+          product.info,
+          product.images,
         ),
     );
 
